@@ -1,12 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Volume2, VolumeX, MapPin, Calendar, Clock, Heart, CalendarPlus, Sparkles, Compass } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MapPin, Calendar, Clock, Heart, CalendarPlus, Sparkles, Compass } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function App() {
   const [curtainOpen, setCurtainOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
 
   // Exact Wedding Date: Sunday, 22nd November 2026
   const targetDate = new Date('2026-11-22T08:00:00').getTime();
@@ -31,11 +29,6 @@ export default function App() {
   const handleOpenTheater = () => {
     setCurtainOpen(true);
 
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-    }
-
     setTimeout(() => {
       confetti({
         particleCount: 130,
@@ -47,17 +40,7 @@ export default function App() {
     }, 1200);
   };
 
-  const toggleMusic = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-    }
-  };
-
-  const calendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=B.Gautham+%26+P.Geetha+Wedding&dates=20261122T023000Z/20261122T063000Z&details=Wedding+Ceremony+and+Reception+of+B.Gautham+and+P.Geetha&location=Sri+Meenakshi+Mahal,+Paramakudi";
+  const calendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=B.kautham+%26+P.Geetha+Wedding&dates=20261122T023000Z/20261122T063000Z&details=Wedding+Ceremony+and+Reception+of+B.kautham+and+P.Geetha&location=Sri+Meenakshi+Sundareswarar+Temple,+Paramakudi";
 
   return (
     <div className="min-h-screen bg-[#120104] text-[#faebd7] font-serif relative overflow-x-hidden selection:bg-amber-600">
@@ -94,14 +77,6 @@ export default function App() {
         }
       `}</style>
 
-      {/* Background BGM */}
-      <audio
-        ref={audioRef}
-        loop
-        preload="auto"
-        src="/bgm.mp3"
-      />
-
       {/* --- THEATER CURTAINS LAYER --- */}
       <div className={`fixed inset-0 z-50 pointer-events-none flex ${showContent ? 'hidden' : 'block'}`}>
         
@@ -127,8 +102,8 @@ export default function App() {
           <div className="absolute inset-0 flex flex-col items-center justify-center z-40 pointer-events-auto p-4">
             <div className="bg-[#240207]/95 border-4 border-amber-400 p-8 rounded-full shadow-[0_0_50px_rgba(212,175,55,0.7)] text-center flex flex-col items-center max-w-xs">
               <div className="text-4xl mb-2 [animation:pulseGlow_2.5s_infinite]">🪔</div>
-              <p className="text-xs text-amber-300 tracking-[0.25em] font-sans font-bold uppercase mb-1">||WELCOME||</p>
-              <h2 className="text-xl font-bold gold-shine font-serif">B.Gautham Weds P.Geetha</h2>
+              <p className="text-xs text-amber-300 tracking-[0.25em] font-sans font-bold uppercase mb-1">|| WELCOME ||</p>
+              <h2 className="text-xl font-bold gold-shine font-serif">B.kautham & P.Geetha</h2>
               <button
                 onClick={handleOpenTheater}
                 className="mt-5 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-sans font-extrabold text-xs tracking-[0.2em] uppercase shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
@@ -139,16 +114,6 @@ export default function App() {
           </div>
         )}
       </div>
-
-      {/* Floating Music Button */}
-      {curtainOpen && (
-        <button
-          onClick={toggleMusic}
-          className="fixed top-5 right-5 z-40 bg-[#3a030c]/90 border-2 border-amber-400 text-amber-300 p-3 rounded-full backdrop-blur-md shadow-2xl hover:scale-110 active:scale-95 transition-all"
-        >
-          {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
-        </button>
-      )}
 
       {/* --- REVEALED WEDDING CARD SCREEN --- */}
       <main className="max-w-md mx-auto px-4 pt-16 pb-20 flex flex-col items-center text-center space-y-9 relative z-20">
@@ -164,20 +129,20 @@ export default function App() {
         <header className="space-y-3 pt-2">
           <div className="text-4xl [animation:pulseGlow_2.5s_infinite]">🪔</div>
           <p className="text-xs text-amber-300/90 tracking-wide font-serif italic">
-            With the blessing of elders,<br />
+            With the blessing of elder,<br />
             We Request the honour of Your gracious presence on the occasion of wedding ceremony of
           </p>
         </header>
 
-        {/* Groom & Bride Details with Degrees & Parents */}
+        {/* Groom & Bride Details */}
         <section className="w-full space-y-4">
           {/* Groom */}
           <div className="py-4 px-4 rounded-3xl bg-gradient-to-b from-[#4a0613]/70 to-transparent border border-amber-400/30 backdrop-blur-sm shadow-xl">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-wide gold-shine font-serif">
-              B. Gautham <span className="text-sm md:text-base font-normal text-amber-300">M.E., M.B.A.,</span>
+              B.kautham <span className="text-sm md:text-base font-normal text-amber-300">M.E.,M.B.A.,</span>
             </h1>
             <p className="text-xs text-amber-200/80 mt-1 font-sans">
-              S/o Dr. S. Balasubramanian & Mrs. A. Alli
+              S/o.Dr. S.Balasubramanian Mrs.A.Alli
             </p>
           </div>
 
@@ -186,10 +151,10 @@ export default function App() {
           {/* Bride */}
           <div className="py-4 px-4 rounded-3xl bg-gradient-to-b from-[#4a0613]/70 to-transparent border border-amber-400/30 backdrop-blur-sm shadow-xl">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-wide gold-shine font-serif">
-              P. Geetha <span className="text-sm md:text-base font-normal text-amber-300">M.E.,</span>
+              P.Geetha <span className="text-sm md:text-base font-normal text-amber-300">M.E.,</span>
             </h1>
             <p className="text-xs text-amber-200/80 mt-1 font-sans">
-              D/o Mr. G. Pandy Perumal & Mrs. R. Jeya Pramila
+              D/o Mr.G.Pandy Perumal - Mrs.R.Jeya Pramila
             </p>
           </div>
 
@@ -218,7 +183,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Events Cards (Ceremony & Reception) */}
+        {/* Events Cards */}
         <section className="w-full space-y-4 text-left">
           
           {/* Ceremony */}
@@ -226,8 +191,8 @@ export default function App() {
             <div className="absolute top-0 right-0 bg-amber-400 text-black text-[10px] font-extrabold px-3 py-1 rounded-bl-2xl uppercase">Ceremony</div>
             <h4 className="text-lg font-bold text-amber-200">Wedding Ceremony</h4>
             <div className="space-y-2 text-xs text-amber-100 font-sans mt-3">
-              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400" /> 8.00 A.M to 10.30 A.M</p>
-              <p className="flex items-start gap-2"><MapPin size={15} className="text-amber-400 shrink-0 mt-0.5" /> Meenakshi Temple, Paramakudi.</p>
+              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400" /> 8 A.M to 10.30 A.M</p>
+              <p className="flex items-start gap-2"><MapPin size={15} className="text-amber-400 shrink-0 mt-0.5" /> Sri Meenakshi Sundareswarar Temple, Paramakudi.</p>
             </div>
           </div>
 
@@ -241,7 +206,7 @@ export default function App() {
                 <MapPin size={15} className="text-amber-400 shrink-0 mt-0.5" /> 
                 <span>
                   <strong>Sri Meenakshi Mahal</strong><br />
-                  <span className="text-[11px] text-amber-200/70">(Near Railway Station, behind the bus stand), Paramakudi</span>
+                  <span className="text-[11px] text-amber-200/70">[Near Railway Station,behind the bus stand] Paramakudi</span>
                 </span>
               </p>
             </div>
@@ -251,7 +216,7 @@ export default function App() {
         {/* Venue Action Buttons */}
         <section className="w-full grid grid-cols-2 gap-3 pt-1 font-sans">
           <a
-            href="https://maps.google.com/?q=Sri+Meenakshi+Mahal+Paramakudi"
+            href="https://maps.google.com/?q=Sri+Meenakshi+Sundareswarar+Temple+Paramakudi"
             target="_blank"
             rel="noreferrer"
             className="py-3.5 rounded-2xl bg-amber-400 text-black text-xs font-bold tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow"
@@ -272,7 +237,7 @@ export default function App() {
         {/* Card Special Quote */}
         <div className="w-full bg-[#450512]/90 border-2 border-amber-400/40 p-5 rounded-3xl shadow-xl space-y-2">
           <p className="text-xs text-amber-100/90 leading-relaxed italic font-serif">
-            "Your Presence is the only gift we wish for. Having You share our Special day is Present enough"
+            "Your Presence is the only gift we wish for.Having You share our Special day is Present enough"
           </p>
           <div className="w-16 h-[1px] bg-amber-400/30 mx-auto my-2"></div>
           <p className="text-[11px] text-amber-200/80 font-sans">
