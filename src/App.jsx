@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Calendar, Clock, Heart, CalendarPlus, Sparkles, Compass } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Volume2, VolumeX, MapPin, Calendar, Clock, Heart, CalendarPlus, Sparkles, Compass } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function App() {
   const [curtainOpen, setCurtainOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   // Exact Wedding Date: Sunday, 22nd November 2026
   const targetDate = new Date('2026-11-22T08:00:00').getTime();
@@ -29,6 +31,7 @@ export default function App() {
   const handleOpenTheater = () => {
     setCurtainOpen(true);
 
+    // Confetti animation
     setTimeout(() => {
       confetti({
         particleCount: 130,
@@ -38,6 +41,20 @@ export default function App() {
       });
       setShowContent(true);
     }, 1200);
+  };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        console.log("Audio play error:", err);
+      });
+    }
   };
 
   const calendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=B.kautham+%26+P.Geetha+Wedding&dates=20261122T023000Z/20261122T063000Z&details=Wedding+Ceremony+and+Reception+of+B.kautham+and+P.Geetha&location=Sri+Meenakshi+Sundareswarar+Temple,+Paramakudi";
@@ -76,6 +93,29 @@ export default function App() {
           50% { filter: drop-shadow(0 0 20px rgba(245, 158, 11, 1)); transform: scale(1.08); }
         }
       `}</style>
+
+      {/* Background BGM Audio Element */}
+      <audio
+        ref={audioRef}
+        loop
+        preload="auto"
+        src="/bgm.mp3"
+      />
+
+      {/* Floating Music Icon Button (Clean circle, no text) */}
+      {curtainOpen && (
+        <button
+          onClick={toggleMusic}
+          aria-label="Toggle Background Music"
+          className="fixed top-5 right-5 z-50 bg-[#3a030c]/90 border-2 border-amber-400 text-amber-300 p-3 rounded-full backdrop-blur-md shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+        >
+          {isPlaying ? (
+            <Volume2 size={20} className="text-amber-400 animate-pulse" />
+          ) : (
+            <VolumeX size={20} className="text-amber-400/80" />
+          )}
+        </button>
+      )}
 
       {/* --- THEATER CURTAINS LAYER --- */}
       <div className={`fixed inset-0 z-50 pointer-events-none flex ${showContent ? 'hidden' : 'block'}`}>
@@ -183,25 +223,29 @@ export default function App() {
           </div>
         </section>
 
-        {/* Events Cards */}
+        {/* Events Cards with Overflow Fixed */}
         <section className="w-full space-y-4 text-left">
           
           {/* Ceremony */}
-          <div className="bg-[#4a0613] border-2 border-amber-400/60 p-5 rounded-3xl shadow-lg relative">
-            <div className="absolute top-0 right-0 bg-amber-400 text-black text-[10px] font-extrabold px-3 py-1 rounded-bl-2xl uppercase">Ceremony</div>
-            <h4 className="text-lg font-bold text-amber-200">Wedding Ceremony</h4>
+          <div className="bg-[#4a0613] border-2 border-amber-400/60 p-5 rounded-3xl shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-gradient-to-l from-amber-400 to-amber-500 text-black text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow">
+              Ceremony
+            </div>
+            <h4 className="text-lg font-bold text-amber-200 pr-20">Wedding Ceremony</h4>
             <div className="space-y-2 text-xs text-amber-100 font-sans mt-3">
-              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400" /> 8 A.M to 10.30 A.M</p>
+              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400 shrink-0" /> 8 A.M to 10.30 A.M</p>
               <p className="flex items-start gap-2"><MapPin size={15} className="text-amber-400 shrink-0 mt-0.5" /> Sri Meenakshi Sundareswarar Temple, Paramakudi.</p>
             </div>
           </div>
 
           {/* Reception */}
-          <div className="bg-[#4a0613] border-2 border-amber-400/60 p-5 rounded-3xl shadow-lg relative">
-            <div className="absolute top-0 right-0 bg-amber-400/20 text-amber-300 border-l border-b border-amber-400/40 text-[10px] font-extrabold px-3 py-1 rounded-bl-2xl uppercase">Reception</div>
-            <h4 className="text-lg font-bold text-amber-200">Reception</h4>
+          <div className="bg-[#4a0613] border-2 border-amber-400/60 p-5 rounded-3xl shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-amber-400/25 border-l border-b border-amber-400/50 text-amber-300 text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider backdrop-blur-sm shadow">
+              Reception
+            </div>
+            <h4 className="text-lg font-bold text-amber-200 pr-20">Reception</h4>
             <div className="space-y-2 text-xs text-amber-100 font-sans mt-3">
-              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400" /> 11 A.M onwards</p>
+              <p className="flex items-center gap-2"><Clock size={15} className="text-amber-400 shrink-0" /> 11 A.M onwards</p>
               <p className="flex items-start gap-2">
                 <MapPin size={15} className="text-amber-400 shrink-0 mt-0.5" /> 
                 <span>
@@ -219,7 +263,7 @@ export default function App() {
             href="https://maps.google.com/?q=Sri+Meenakshi+Sundareswarar+Temple+Paramakudi"
             target="_blank"
             rel="noreferrer"
-            className="py-3.5 rounded-2xl bg-amber-400 text-black text-xs font-bold tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow"
+            className="py-3.5 rounded-2xl bg-amber-400 text-black text-xs font-bold tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow active:scale-95 transition-transform"
           >
             <Compass size={15} /> Location Map
           </a>
@@ -228,7 +272,7 @@ export default function App() {
             href={calendarUrl}
             target="_blank"
             rel="noreferrer"
-            className="py-3.5 rounded-2xl bg-white/10 border border-amber-300/40 text-amber-100 text-xs font-bold tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow"
+            className="py-3.5 rounded-2xl bg-white/10 border border-amber-300/40 text-amber-100 text-xs font-bold tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow active:scale-95 transition-transform"
           >
             <CalendarPlus size={15} /> Add Calendar
           </a>
