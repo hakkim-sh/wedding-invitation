@@ -19,8 +19,8 @@ export default function App() {
       if (distance > 0) {
         setTimeLeft({
           days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60)),
+          minutes: Math.floor((distance % (1000 * 60)) / (1000 * 60)),
           seconds: Math.floor((distance % (1000 * 60)) / 1000),
         });
       }
@@ -28,8 +28,23 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
+  // OPEN INVITATION click pannina udaney Curtain + Music renduமே start aagum
   const handleOpenTheater = () => {
     setCurtainOpen(true);
+
+    // Auto-play music on click
+    if (audioRef.current) {
+      audioRef.current.volume = 0.7;
+      audioRef.current.currentTime = 0;
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.log("Audio autoplay error:", err);
+        });
+    }
 
     // Confetti animation
     setTimeout(() => {
@@ -49,11 +64,14 @@ export default function App() {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch((err) => {
-        console.log("Audio play error:", err);
-      });
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.log("Audio play error:", err);
+        });
     }
   };
 
@@ -102,7 +120,7 @@ export default function App() {
         src="/bgm.mp3"
       />
 
-      {/* Floating Music Icon Button (Clean circle, no text) */}
+      {/* Floating Music Icon Button */}
       {curtainOpen && (
         <button
           onClick={toggleMusic}
@@ -146,7 +164,7 @@ export default function App() {
               <h2 className="text-xl font-bold gold-shine font-serif">B.kautham & P.Geetha</h2>
               <button
                 onClick={handleOpenTheater}
-                className="mt-5 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-sans font-extrabold text-xs tracking-[0.2em] uppercase shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                className="mt-5 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black font-sans font-extrabold text-xs tracking-[0.2em] uppercase shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Sparkles size={16} /> ✦ OPEN INVITATION ✦
               </button>
@@ -186,7 +204,10 @@ export default function App() {
             </p>
           </div>
 
-          <div className="text-amber-300 text-2xl font-serif italic">With...</div>
+          {/* Weds Indicator */}
+          <div className="text-amber-300 text-3xl font-serif italic font-bold tracking-widest gold-shine py-1">
+            Weds
+          </div>
 
           {/* Bride */}
           <div className="py-4 px-4 rounded-3xl bg-gradient-to-b from-[#4a0613]/70 to-transparent border border-amber-400/30 backdrop-blur-sm shadow-xl">
@@ -223,7 +244,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Events Cards with Overflow Fixed */}
+        {/* Events Cards */}
         <section className="w-full space-y-4 text-left">
           
           {/* Ceremony */}
@@ -289,13 +310,33 @@ export default function App() {
           </p>
         </div>
 
-        {/* Compliments Footer */}
-        <footer className="pt-6 pb-4 text-xs text-amber-300/80 border-t border-amber-400/20 w-full space-y-1">
-          <p className="italic font-serif text-amber-200/70">With Warm Regards...</p>
-          <p className="font-serif text-amber-200 text-lg font-bold tracking-wider">Friends & Relatives</p>
-          <p className="flex items-center justify-center gap-1 text-[11px] font-sans pt-3 text-amber-400/60">
-            Made with <Heart size={12} className="text-red-500 fill-red-500" /> for the celebration
-          </p>
+        {/* Compliments Footer & Brand Instagram Badge */}
+        <footer className="pt-6 pb-6 text-xs text-amber-300/80 border-t border-amber-400/20 w-full space-y-4">
+          <div>
+            <p className="italic font-serif text-amber-200/70">With Warm Regards...</p>
+            <p className="font-serif text-amber-200 text-lg font-bold tracking-wider">Friends & Relatives</p>
+          </div>
+
+          {/* Instagram Brand Card & Promotion */}
+          <div className="pt-2 flex flex-col items-center">
+            <a
+              href="https://www.instagram.com/invit.ecraft"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-pink-600/30 via-purple-600/30 to-amber-500/30 border border-amber-400/50 text-amber-200 hover:text-white hover:border-amber-300 transition-all shadow-md active:scale-95 group font-sans text-[11px]"
+            >
+              {/* Native Clean Instagram SVG */}
+              <svg className="w-4 h-4 text-pink-400 group-hover:scale-110 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+              <span>Created by <strong className="text-amber-300 underline underline-offset-2">@invit.ecraft</strong></span>
+            </a>
+            <p className="text-[10px] text-amber-400/60 font-sans mt-2">
+              DM for custom digital invitations for all occasions ✨
+            </p>
+          </div>
         </footer>
 
       </main>
